@@ -21,6 +21,28 @@ Follow [Proton's port-forwarding setup](https://protonvpn.com/support/port-forwa
 
 ## Install
 
+### Download and double-click
+
+Download the Windows ZIP from [Releases](https://github.com/SeanShaffer88/proton-qbit-port-sync/releases/latest), extract it completely, and double-click **Install.cmd**. After confirming that the package came from this repository, follow the setup prompts. No administrator rights or extra downloads required.
+
+Setup preview:
+
+```text
+Proton qBittorrent Port Sync - Setup
+-----------------------------------
+Before installing:
+  1. Enable port forwarding in your paid Proton VPN app.
+  2. In qBittorrent > Options > Advanced, select the ProtonVPN network interface.
+  3. Exit qBittorrent completely, including its tray icon.
+
+Ready to install? [Y/N]
+Installation complete. Open qBittorrent normally.
+```
+
+The launcher unblocks only the five packaged PowerShell files and uses a process-scoped `RemoteSigned` policy; it does not change your saved execution policy. Organization policy can still prevent installation. This release is unsigned.
+
+### Command-line installation
+
 1. Download the source ZIP from GitHub and extract it. Review the scripts. If Windows marks downloaded scripts as blocked, use the file's Properties > Unblock for the files you have reviewed.
 2. Exit qBittorrent completely, including its tray icon. Open Proton VPN at least once so its log exists.
 3. Open a PowerShell session that permits local scripts in the extracted project directory and run (PowerShell 7 is recommended):

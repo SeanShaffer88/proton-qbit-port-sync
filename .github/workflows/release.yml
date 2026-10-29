@@ -1,0 +1,26 @@
+name: Publish release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test Windows PowerShell 5.1
+        shell: powershell
+        run: ./tests/Test.ps1
+      - name: Test PowerShell 7
+        shell: pwsh
+        run: ./tests/Test.ps1
+      - name: Build downloadable ZIP and checksum
+        shell: pwsh
+        run: ./Build-Release.ps1 -Version ($env:GITHUB_REF_NAME -replace '^v','')
+      - name: Publish GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME ./dist/*.zip ./dist/SHA256SUMS.txt --verify-tag --title "Proton qBittorrent Port Sync $env:GITHUB_REF_NAME" --notes-file RELEASE-NOTES.md

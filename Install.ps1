@@ -65,7 +65,7 @@ if ($PSVersionTable.PSEdition -eq 'Core') { $engine = Join-Path $PSHOME 'pwsh.ex
 $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Startup')) 'Proton qBittorrent Port Sync.lnk'))
 $shortcut.TargetPath = $engine
-$shortcut.Arguments = '-NoProfile -NonInteractive -WindowStyle Hidden -File "' + (Join-Path $root 'Watch-Port.ps1') + '"'
+$shortcut.Arguments = '-NoProfile -NonInteractive -ExecutionPolicy RemoteSigned -WindowStyle Hidden -File "' + (Join-Path $root 'Watch-Port.ps1') + '"'
 $shortcut.WorkingDirectory = $root; $shortcut.WindowStyle = 7; $shortcut.Save()
 if (!$NoStart) { Start-Process -FilePath $engine -ArgumentList $shortcut.Arguments -WindowStyle Hidden }
 Write-Output "Installed in $root. Starts at sign-in; waits until Proton VPN and qBittorrent are running."

@@ -66,6 +66,21 @@ Assert ((@($duplicate -split '\r?\n' | Where-Object { $_ -match '^A=' })).Count 
     if (!$rejected) { throw 'Nonlocal API accepted' }
 }
 $script:checks += 5
+$releaseOutput = Join-Path ([IO.Path]::GetTempPath()) ('proton-qbit-test-' + [guid]::NewGuid().ToString('N'))
+& (Join-Path $PSScriptRoot '..\Build-Release.ps1') -OutputDirectory $releaseOutput | Out-Null
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$zipPath = Join-Path $releaseOutput 'proton-qbit-port-sync-0.1.0-windows.zip'
+$archive = [IO.Compression.ZipFile]::OpenRead($zipPath)
+try {
+    $entries = @($archive.Entries | ForEach-Object FullName)
+    Assert ($entries.Count -eq 8) 'Unexpected release file count'
+    foreach ($required in @('Install.cmd','Setup.ps1','Install.ps1','Watch-Port.ps1','Uninstall.ps1','PortSync.psm1','README.md','LICENSE')) {
+        Assert ($entries -contains $required) "Missing packaged file: $required"
+    }
+    Assert (!($entries | Where-Object { $_ -match '(credential|config\.json|\.log$|\.ini$|\.git/)' })) 'Private runtime files packaged'
+} finally { $archive.Dispose() }
+$checksum = Get-Content -LiteralPath (Join-Path $releaseOutput 'SHA256SUMS.txt') -Raw
+Assert ($checksum.StartsWith((Get-FileHash $zipPath -Algorithm SHA256).Hash.ToLowerInvariant())) 'Release checksum mismatch'
 Get-ChildItem (Join-Path $PSScriptRoot '..') -Recurse -File | Where-Object Extension -in '.ps1','.psm1' | ForEach-Object {
     $tokens=$null; $errors=$null
     [Management.Automation.Language.Parser]::ParseFile($_.FullName,[ref]$tokens,[ref]$errors) | Out-Null
