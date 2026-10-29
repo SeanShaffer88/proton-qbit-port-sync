@@ -1,0 +1,12 @@
+Before you install
+
+1. Install qBittorrent 5.x and the Proton VPN Windows app.
+2. Enable port forwarding in your paid Proton VPN account.
+3. In qBittorrent > Tools > Options > Advanced, select the Proton VPN network interface.
+4. Exit qBittorrent completely, including its tray icon.
+
+Setup runs for your Windows account without administrator rights. It installs the background watcher, configures its password-protected local API, and starts it automatically at sign-in. No script commands are required.
+
+Existing Port Sync installations are upgraded while preserving settings and credentials. If you already use a separate qBittorrent Web UI, use the ZIP installer to supply its current credentials.
+
+The uninstaller stops the watcher and removes startup. It retains your runtime settings, backup, and encrypted credential in LocalAppData\ProtonQbitPortSync, and leaves your qBittorrent settings in place.

@@ -1,16 +1,17 @@
-Automatically keep qBittorrent's incoming port matched to Proton VPN port forwarding on Windows.
+### Native Windows installer
 
-### Easy installation
+Download **proton-qbit-port-sync-0.2.0-setup.exe** below and follow the setup wizard. No manual script commands or administrator rights required.
 
-1. Download **proton-qbit-port-sync-0.1.0-windows.zip** below.
-2. Extract the ZIP completely.
-3. Enable Proton port forwarding, bind qBittorrent to the Proton VPN network interface, and exit qBittorrent.
-4. Double-click **Install.cmd** and follow the prompts. Then open qBittorrent normally.
+Before installing, enable port forwarding in paid Proton VPN, bind qBittorrent to its Proton VPN network interface, and exit qBittorrent completely.
 
-Requires a paid Proton VPN plan and qBittorrent 5.x. Uses Windows PowerShell 5.1; no administrator rights or extra packages required. Existing Web UI users are prompted for their current login and must bind that UI to 127.0.0.1.
+- Native wizard with prerequisite checks and specific recovery instructions.
+- Per-user installation and automatic sign-in startup.
+- Windows Installed apps and Start menu uninstaller.
+- Upgrades existing Port Sync installations while preserving settings and encrypted credentials.
+- Authenticated API restricted to this PC; VPN interface binding remains unchanged.
+- ZIP installer remains available for custom paths and existing independent Web UI credentials.
+- SHA256SUMS.txt covers both the EXE and ZIP.
 
-Includes automatic sign-in startup, encrypted credential storage, localhost-only API access, VPN binding checks, an uninstall script, and SHA-256 checksums. No credentials or personal logs are included in the release.
+The executable is unsigned. Setup runs bundled PowerShell scripts behind the scenes with a process-scoped RemoteSigned policy. It does not change saved execution policy or override Group Policy. Uninstall retains runtime settings, encrypted credentials, backups, and qBittorrent preferences.
 
-This first release is unsigned. The installer asks before running the included scripts, unblocks only its five packaged PowerShell files, and uses RemoteSigned for that process. It does not change your saved execution policy or override Group Policy. Managed environments may require administrator-approved scripts.
-
-Validated with automated tests on Windows PowerShell 5.1 and PowerShell 7, plus a live qBittorrent/Proton VPN API test. Proton log format changes may require a future update.
+Release validation includes PowerShell 5.1/7 tests and an isolated Windows runner test of fresh install, credential-preserving upgrade, and native uninstall.

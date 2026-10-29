@@ -67,7 +67,7 @@ Assert ((@($duplicate -split '\r?\n' | Where-Object { $_ -match '^A=' })).Count 
 }
 $script:checks += 5
 $releaseOutput = Join-Path ([IO.Path]::GetTempPath()) ('proton-qbit-test-' + [guid]::NewGuid().ToString('N'))
-& (Join-Path $PSScriptRoot '..\Build-Release.ps1') -OutputDirectory $releaseOutput | Out-Null
+& (Join-Path $PSScriptRoot '..\Build-Release.ps1') -Version '0.1.0' -OutputDirectory $releaseOutput | Out-Null
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $zipPath = Join-Path $releaseOutput 'proton-qbit-port-sync-0.1.0-windows.zip'
 $archive = [IO.Compression.ZipFile]::OpenRead($zipPath)

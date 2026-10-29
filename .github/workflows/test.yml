@@ -13,3 +13,14 @@ jobs:
       - name: PowerShell 7 tests
         shell: pwsh
         run: ./tests/Test.ps1
+      - name: Build native installer
+        if: github.ref_type == 'branch'
+        shell: pwsh
+        run: |
+          $compiler = ./installer/Get-Compiler.ps1
+          & $compiler /Q /DAppVersion=0.2.0 ./installer/Setup.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Installer compilation failed' }
+      - name: Native installer smoke tests
+        if: github.ref_type == 'branch'
+        shell: pwsh
+        run: ./tests/Installer-Smoke.ps1 -SetupExe ./dist/proton-qbit-port-sync-0.2.0-setup.exe

@@ -15,7 +15,19 @@ jobs:
       - name: Test PowerShell 7
         shell: pwsh
         run: ./tests/Test.ps1
-      - name: Build downloadable ZIP and checksum
+      - name: Build native Windows setup
+        shell: pwsh
+        run: |
+          $compiler = ./installer/Get-Compiler.ps1
+          $version = $env:GITHUB_REF_NAME -replace '^v',''
+          & $compiler "/DAppVersion=$version" ./installer/Setup.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Installer compilation failed' }
+      - name: Test fresh install, upgrade, and uninstall
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME -replace '^v',''
+          ./tests/Installer-Smoke.ps1 -SetupExe "./dist/proton-qbit-port-sync-$version-setup.exe"
+      - name: Build downloadable ZIP and checksums
         shell: pwsh
         run: ./Build-Release.ps1 -Version ($env:GITHUB_REF_NAME -replace '^v','')
       - name: Publish GitHub release
@@ -23,4 +35,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create $env:GITHUB_REF_NAME ./dist/*.zip ./dist/SHA256SUMS.txt --verify-tag --title "Proton qBittorrent Port Sync $env:GITHUB_REF_NAME" --notes-file RELEASE-NOTES.md
+          gh release create $env:GITHUB_REF_NAME ./dist/*.exe ./dist/*.zip ./dist/SHA256SUMS.txt --verify-tag --title "Proton qBittorrent Port Sync $env:GITHUB_REF_NAME" --notes-file RELEASE-NOTES.md

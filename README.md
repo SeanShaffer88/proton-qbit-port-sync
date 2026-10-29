@@ -21,6 +21,16 @@ Follow [Proton's port-forwarding setup](https://protonvpn.com/support/port-forwa
 
 ## Install
 
+### Windows setup executable (recommended)
+
+Download **proton-qbit-port-sync-0.2.0-setup.exe** from [Releases](https://github.com/SeanShaffer88/proton-qbit-port-sync/releases/latest), open it, and follow the wizard. No manual PowerShell commands, extra packages, or administrator rights required. Prepare Proton port forwarding and the qBittorrent VPN binding first, then exit qBittorrent before installing.
+
+The wizard checks prerequisites, upgrades existing Port Sync installations while preserving settings, and registers an uninstaller in **Windows Settings > Apps > Installed apps** and the Start menu. It runs bundled configuration scripts behind the scenes with a process-scoped `RemoteSigned` policy, without changing your saved execution policy. The executable is unsigned; organization policies may restrict it.
+
+Existing independent qBittorrent Web UI users should use the ZIP installer below to provide their current credentials. The EXE refuses to replace an existing Web UI login. Uninstall removes startup and application files, but retains runtime configuration, encrypted credentials, backups, and qBittorrent preferences.
+
+See the [wizard preview](installer/preview.md). Build from source using `installer/Get-Compiler.ps1`, then use the returned Inno Setup compiler path to compile `installer/Setup.iss`. The compiler download comes from the official upstream release and is checked against a pinned SHA-256 hash. Its own license applies to building; this project's source is MIT licensed.
+
 ### Download and double-click
 
 Download the Windows ZIP from [Releases](https://github.com/SeanShaffer88/proton-qbit-port-sync/releases/latest), extract it completely, and double-click **Install.cmd**. After confirming that the package came from this repository, follow the setup prompts. No administrator rights or extra downloads required.
