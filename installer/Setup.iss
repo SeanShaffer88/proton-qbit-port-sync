@@ -13,6 +13,8 @@ DisableDirPage=yes
 DefaultGroupName=Proton qBittorrent Port Sync
 DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
+ArchitecturesAllowed=x64compatible
+ArchitecturesInstallIn64BitMode=x64compatible
 MinVersion=10.0
 WizardStyle=modern
 OutputDir=..\dist
@@ -43,6 +45,8 @@ Name: "{group}\Project and help"; Filename: "https://github.com/SeanShaffer88/pr
 Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -NonInteractive -ExecutionPolicy RemoteSigned -File ""{app}\Bridge.ps1"" -Mode Uninstall"; Flags: runhidden waituntilterminated; RunOnceId: "StopPortSync"
 
 [Code]
+var ConfigurationFailed: Boolean;
+
 function RunBridge(const Directory, Mode: String; var Detail: String): Boolean;
 var ExitCode: Integer; ErrorFile, Args: String; ErrorText: AnsiString;
 begin
@@ -69,5 +73,13 @@ procedure CurStepChanged(CurStep: TSetupStep);
 var Detail: String;
 begin
   if CurStep = ssPostInstall then
-    if not RunBridge(ExpandConstant('{app}'), 'Install', Detail) then RaiseException(Detail);
+    if not RunBridge(ExpandConstant('{app}'), 'Install', Detail) then begin
+      ConfigurationFailed := True;
+      RaiseException(Detail);
+    end;
+end;
+
+function GetCustomSetupExitCode: Integer;
+begin
+  if ConfigurationFailed then Result := 1 else Result := 0;
 end;

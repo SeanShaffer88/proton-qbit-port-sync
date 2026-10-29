@@ -1,6 +1,9 @@
 #requires -Version 5.1
 param([ValidateSet('Check','Install','Uninstall')][string]$Mode, [string]$ErrorFile)
 $ErrorActionPreference = 'Stop'
+# A setup launched from PowerShell 7 can inherit its module search path.
+# Use the Windows PowerShell engine's own modules for Windows PowerShell 5.1.
+$env:PSModulePath = Join-Path $PSHOME 'Modules'
 $root = Join-Path $env:LOCALAPPDATA 'ProtonQbitPortSync'
 try {
     if ($Mode -eq 'Uninstall') {

@@ -23,7 +23,7 @@ Follow [Proton's port-forwarding setup](https://protonvpn.com/support/port-forwa
 
 ### Windows setup executable (recommended)
 
-Download **proton-qbit-port-sync-0.2.0-setup.exe** from [Releases](https://github.com/SeanShaffer88/proton-qbit-port-sync/releases/latest), open it, and follow the wizard. No manual PowerShell commands, extra packages, or administrator rights required. Prepare Proton port forwarding and the qBittorrent VPN binding first, then exit qBittorrent before installing.
+Download **proton-qbit-port-sync-0.2.0-setup.exe** from [Releases](https://github.com/SeanShaffer88/proton-qbit-port-sync/releases/latest), open it, and follow the wizard on 64-bit Windows 10/11. No manual PowerShell commands, extra packages, or administrator rights required. Prepare Proton port forwarding and the qBittorrent VPN binding first, then exit qBittorrent before installing.
 
 The wizard checks prerequisites, upgrades existing Port Sync installations while preserving settings, and registers an uninstaller in **Windows Settings > Apps > Installed apps** and the Start menu. It runs bundled configuration scripts behind the scenes with a process-scoped `RemoteSigned` policy, without changing your saved execution policy. The executable is unsigned; organization policies may restrict it.
 
