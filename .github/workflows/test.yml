@@ -5,11 +5,11 @@ permissions:
 jobs:
   test:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        shell: [powershell, pwsh]
     steps:
       - uses: actions/checkout@v4
-      - name: Parser, configuration, and API integration tests
-        shell: ${{ matrix.shell }}
+      - name: Windows PowerShell 5.1 tests
+        shell: powershell
+        run: ./tests/Test.ps1
+      - name: PowerShell 7 tests
+        shell: pwsh
         run: ./tests/Test.ps1
