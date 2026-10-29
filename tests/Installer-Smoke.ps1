@@ -19,7 +19,12 @@ function Run-Setup([string]$LogName) {
     if ($process.ExitCode -ne 0) { Get-Content $log -Tail 50; throw "Installer failed: $($process.ExitCode)" }
 }
 Run-Setup 'fresh.log'
-if (!(Test-Path (Join-Path $runtime 'config.json')) -or !(Test-Path (Join-Path $app 'unins000.exe'))) { throw 'Fresh install did not create configuration and native uninstaller.' }
+if (!(Test-Path (Join-Path $runtime 'config.json')) -or !(Test-Path (Join-Path $app 'unins000.exe'))) {
+    Get-Content (Join-Path $fixture 'fresh.log') -Tail 100
+    Write-Output ('Expected runtime: ' + $runtime)
+    Get-ChildItem -LiteralPath $fixture -Recurse -File | Select-Object FullName
+    throw 'Fresh install did not create configuration and native uninstaller.'
+}
 $credentialHash = (Get-FileHash (Join-Path $runtime 'credential.xml')).Hash
 $configBefore = Get-Content (Join-Path $runtime 'config.json') -Raw
 Run-Setup 'upgrade.log'
