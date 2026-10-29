@@ -14,7 +14,8 @@ $runtime = Join-Path $env:LOCALAPPDATA 'ProtonQbitPortSync'
 $exe = (Resolve-Path $SetupExe).Path
 function Run-Setup([string]$LogName) {
     $log = Join-Path $fixture $LogName
-    $process = Start-Process -FilePath $exe -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /DIR="' + $app + '" /LOG="' + $log + '"') -WindowStyle Hidden -Wait -PassThru
+    $process = Start-Process -FilePath $exe -ArgumentList ('/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /DIR="' + $app + '" /LOG="' + $log + '"') -WindowStyle Hidden -PassThru
+    if (!$process.WaitForExit(90000)) { throw 'Installer process timed out.' }
     if ($process.ExitCode -ne 0) { Get-Content $log -Tail 50; throw "Installer failed: $($process.ExitCode)" }
 }
 Run-Setup 'fresh.log'
@@ -24,7 +25,8 @@ $configBefore = Get-Content (Join-Path $runtime 'config.json') -Raw
 Run-Setup 'upgrade.log'
 if ((Get-FileHash (Join-Path $runtime 'credential.xml')).Hash -ne $credentialHash) { throw 'Upgrade changed encrypted credentials.' }
 if ((Get-Content (Join-Path $runtime 'config.json') -Raw) -ne $configBefore) { throw 'Upgrade changed user configuration.' }
-$uninstall = Start-Process -FilePath (Join-Path $app 'unins000.exe') -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -WindowStyle Hidden -Wait -PassThru
+$uninstall = Start-Process -FilePath (Join-Path $app 'unins000.exe') -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -WindowStyle Hidden -PassThru
+if (!$uninstall.WaitForExit(90000)) { throw 'Uninstaller process timed out.' }
 if ($uninstall.ExitCode -ne 0) { throw 'Native uninstall failed.' }
 $shortcut = Join-Path ([Environment]::GetFolderPath('Startup')) 'Proton qBittorrent Port Sync.lnk'
 if (Test-Path $shortcut) { throw 'Startup shortcut remained after uninstall.' }

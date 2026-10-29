@@ -17,6 +17,6 @@
 └─────────────────────────────────────────────────────┘
 ```
 
-Flow: license → prerequisites → ready to install → configuration and startup → finish.
+Flow: prerequisites → ready to install → configuration and startup → finish.
 Prerequisite failures appear in the wizard with a specific fix and a retry option.
 Windows Installed apps and the Start menu expose the uninstaller.

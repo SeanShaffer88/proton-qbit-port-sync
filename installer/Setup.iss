@@ -15,7 +15,6 @@ DisableProgramGroupPage=yes
 PrivilegesRequired=lowest
 MinVersion=10.0
 WizardStyle=modern
-LicenseFile=..\LICENSE
 OutputDir=..\dist
 OutputBaseFilename=proton-qbit-port-sync-{#AppVersion}-setup
 Compression=lzma2
